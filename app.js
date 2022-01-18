@@ -18,8 +18,9 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true, limit: '1kb', parameterLimit: 10 }));
 
-app.use('*', (req, res) => {
+app.use('*', (req, res, next) => {
   sendErrRes(res, errCodes.ERR_CODE_NOT_FOUND, errMsgs.ERR_MSG_NOT_FOUND('page'));
+  next();
 });
 
 app.use(handleErrors);
