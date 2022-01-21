@@ -45,3 +45,5 @@ module.exports.errors = {
 module.exports.sendErrRes = (res, errCode, errMsg) => {
   res.status(errCode).send({ message: errMsg });
 };
+
+module.exports.urlRegEx = /https?:\/\/(www\.)?[a-zA-Z0-9._~:/?#[\]@!$&'()*+,;=]+/;
