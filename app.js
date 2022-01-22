@@ -1,10 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const { handleErrors } = require('./middlewares/error');
-const {
-  errMsgs,
-} = require('./utils/utils');
-const NotFoundError = require('./errors/NotFoundError');
+const router = require('./routes/index');
 
 const { PORT } = process.env;
 
@@ -25,8 +22,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use((req, res, next) => next(new NotFoundError(errMsgs.ERR_MSG_NOT_FOUND('page'))));
-
+app.use(router);
 app.use(handleErrors);
 
 app.listen(PORT);
