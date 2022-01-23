@@ -44,7 +44,7 @@ const movieSchema = new mongoose.Schema({
     match: urlRegEx,
   },
   owner: {
-    type: mongoose.Shema.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: 'user',
     required: true,
   },
@@ -52,13 +52,13 @@ const movieSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  nameRu: {
+  nameRU: {
     type: String,
     required: true,
     minlength: 2,
     maxlength: 1024,
   },
-  nameEn: {
+  nameEN: {
     type: String,
     required: true,
     minlength: 2,
