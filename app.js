@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const cookieParser = require('cookie-parser');
 const { handleErrors } = require('./middlewares/error');
 const router = require('./routes/index');
 
@@ -13,14 +14,7 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true, limit: '1kb', parameterLimit: 10 }));
-
-// temp authorization
-app.use((req, res, next) => {
-  req.user = {
-    _id: '61e63c97773c0053863840ba',
-  };
-  next();
-});
+app.use(cookieParser());
 
 app.use(router);
 app.use(handleErrors);

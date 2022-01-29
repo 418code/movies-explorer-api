@@ -1,8 +1,18 @@
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const {
   errMsgs,
+  errNames,
+  errCodes,
+  jwtDevKey,
+  cookieMaxAge,
 } = require('../utils/utils');
 const NotFoundError = require('../errors/NotFoundError');
+const ConflictError = require('../errors/ConflictError');
+const BadDataError = require('../errors/BadDataError');
+
+const { NODE_ENV, JWT_SECRET } = process.env;
 
 // GET /users/me
 module.exports.getUserInfo = (req, res, next) => {
@@ -25,4 +35,60 @@ module.exports.updateUser = (req, res, next) => {
       res.send({ data: user });
     })
     .catch(next);
+};
+
+// POST /signup
+module.exports.register = async (req, res, next) => {
+  const {
+    email,
+    password,
+    name,
+  } = req.body;
+
+  const hash = await bcrypt.hash(password, 10);
+  User.create({
+    email,
+    password: hash,
+    name,
+  }, (err, usr) => {
+    try {
+      if (err && err.name === errNames.MONGO && err.code === errCodes.ERR_CODE_MDB_DUPLICATE) {
+        throw new ConflictError(errMsgs.ERR_MSG_NOT_CREATED('user'));
+      } else if (!usr) {
+        throw new BadDataError(errMsgs.ERR_MSG_NOT_CREATED('user'));
+      } else {
+        res.send({ data: { email } });
+      }
+    } catch (error) {
+      next(error);
+    }
+  });
+};
+
+// POST /signin
+module.exports.login = (req, res, next) => {
+  const { email, password } = req.body;
+
+  User.findUserByCredentials(email, password)
+    .then((user) => {
+      const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : jwtDevKey, { expiresIn: '7d' });
+      res.cookie('jwt', token, {
+        maxAge: cookieMaxAge,
+        httpOnly: true,
+      })
+        .end();
+    })
+    .catch(next);
+};
+
+// POSt /signout
+module.exports.logout = (req, res, next) => {
+  const token = req.cookies.jwt || '';
+
+  if (token) {
+    res.clearCookie('jwt');
+  } else {
+    throw new NotFoundError('cookie');
+  }
+  next();
 };
