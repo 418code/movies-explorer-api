@@ -83,12 +83,6 @@ module.exports.login = (req, res, next) => {
 
 // POSt /signout
 module.exports.logout = (req, res, next) => {
-  const token = req.cookies.jwt || '';
-
-  if (token) {
-    res.clearCookie('jwt');
-  } else {
-    throw new NotFoundError('cookie');
-  }
+  res.clearCookie('jwt');
   next();
 };
