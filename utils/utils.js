@@ -51,3 +51,8 @@ module.exports.urlRegEx = /https?:\/\/(www\.)?[a-zA-Z0-9._~:/?#[\]@!$&'()*+,;=]+
 module.exports.jwtDevKey = 'aa261cbe7d74fd2d3766c625d186fa075759a4e267b4ea8413f8f68697082921';
 
 module.exports.cookieMaxAge = 7 * 24 * 60 * 60; // time in seconds
+
+module.exports.limiterValues = {
+  windowMs: 10 * 60 * 1000, // 10 min
+  max: 100, // limit each IP to 100 requests per windowMs
+};
