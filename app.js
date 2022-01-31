@@ -1,5 +1,4 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const { handleErrors } = require('./middlewares/error');
 const router = require('./routes/index');
@@ -8,12 +7,11 @@ const {
   requestLogger,
   errorLogger,
 } = require('./middlewares/logger');
+const { mongoConnect } = require('./utils/utils');
 
 const { PORT } = process.env;
 
-mongoose.connect('mongodb://localhost:27017/moviesdb', {
-  useNewUrlParser: true,
-});
+mongoConnect();
 
 const app = express();
 
