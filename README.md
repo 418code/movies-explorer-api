@@ -5,13 +5,23 @@ Node/Express/MongoDB back end for React movie search front end
 
 ## Live deployment
 
-[https://api.movies.418co.de](https://api.movies.418co.de)
+[https://api.movies.418co.de](https://api.movies.418co.de) \
+\
+`npm ci` — install packages with exact versions \
+`pm2 init simple` — creates a ecosystem.config.js file for pm2 to pass .env variables \
+`node -e "console.log(require('crypto').randomBytes(256).toString('base64'));"` — generates JWT secret key \
+fill ecosystem.config.js variables: NODE_ENV, PORT, JWT_SECRET, MONGO_URL
+fill ecosystem.config.js name and script values
+`pm2 start/stop/restart ecosystem.config.js` — manage application run state with pm2 \
+`pm2 save` — save pm2 running state to auto restart the app
+
 
 ## Run the project locally
 
 `npm ci` — install packages with exact versions \
 `npm run start` — starts the server   
-`npm run dev` — starts the server with hot-reload
+`npm run dev` — starts the server with hot-reload \
+for testing production environment add movies.env with NODE_ENV, PORT, JWT_SECRET, MONGO_URL variables set
 
 ## Technologies used
 - Node, Express: middlewares, routers, controllers, REST api, error handling
