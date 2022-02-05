@@ -1,6 +1,7 @@
 const express = require('express');
 const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
+const mongoose = require('mongoose');
 const { handleErrors } = require('./middlewares/error');
 const router = require('./routes/index');
 const limiter = require('./middlewares/limit');
@@ -8,11 +9,12 @@ const {
   requestLogger,
   errorLogger,
 } = require('./middlewares/logger');
-const { mongoConnect } = require('./utils/utils');
 
-const { PORT } = process.env;
+const { PORT, NODE_ENV, MONGO_URL } = process.env;
 
-mongoConnect();
+mongoose.connect(NODE_ENV === 'production' ? MONGO_URL : 'mongodb://localhost:27017/moviesdb', {
+  useNewUrlParser: true,
+});
 
 const app = express();
 

@@ -1,7 +1,3 @@
-const mongoose = require('mongoose');
-
-const { NODE_ENV, MONGO_URL } = process.env;
-
 module.exports.errMsgs = {
   ERR_MSG_DEFAULT: 'A server error happened',
   ERR_MSG_LOGIN: 'Wrong email or password',
@@ -55,10 +51,4 @@ module.exports.cookieMaxAge = 7 * 24 * 60 * 60; // time in seconds
 module.exports.limiterValues = {
   windowMs: 10 * 60 * 1000, // 10 min
   max: 100, // limit each IP to 100 requests per windowMs
-};
-
-module.exports.mongoConnect = () => {
-  mongoose.connect(NODE_ENV === 'production' ? MONGO_URL : 'mongodb://localhost:27017/moviesdb', {
-    useNewUrlParser: true,
-  });
 };
