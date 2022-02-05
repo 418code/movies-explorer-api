@@ -29,12 +29,19 @@ module.exports.updateUser = (req, res, next) => {
   const { name, email } = req.body;
   const { _id } = req.user;
 
-  User.findByIdAndUpdate(_id, { name, email }, { new: true, runValidators: true })
-    .orFail(() => NotFoundError(errMsgs.ERR_MSG_NOT_FOUND('user')))
-    .then((user) => {
-      res.send({ data: user });
-    })
-    .catch(next);
+  User.findByIdAndUpdate(_id, { name, email }, { new: true, runValidators: true }, (err, user) => {
+    try {
+      if (err && err.name === errNames.MONGO && err.code === errCodes.ERR_CODE_MDB_DUPLICATE) {
+        throw new ConflictError(errMsgs.ERR_MSG_NOT_UPDATED('email'));
+      } else if (!user) {
+        throw new BadDataError(errMsgs.ERR_MSG_NOT_UPDATED('user'));
+      } else {
+        res.send({ data: user });
+      }
+    } catch (error) {
+      next(error);
+    }
+  });
 };
 
 // POST /signup

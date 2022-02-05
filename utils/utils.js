@@ -13,10 +13,6 @@ module.exports.errMsgs = {
   ERR_MSG_NOT_UPDATED: (name) => `Requested ${name} not updated`,
 };
 
-module.exports.resMsgs = {
-  RES_MSG_MOVIE_DELETED: 'Movie successfully deleted',
-};
-
 module.exports.errNames = {
   VALIDATION: 'ValidationError',
   CAST: 'CastError',

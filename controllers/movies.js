@@ -4,7 +4,6 @@ const NotFoundError = require('../errors/NotFoundError');
 const ForbiddenError = require('../errors/ForbiddenError');
 const {
   errMsgs,
-  resMsgs,
 } = require('../utils/utils');
 
 // GET /movies — returns all movies
@@ -13,7 +12,6 @@ module.exports.getMovies = (req, res, next) => {
 
   Movie.find({ owner: _id })
     .orFail(() => new NotFoundError(errMsgs.ERR_MSG_NOT_FOUND('movies')))
-    .populate(['owner'])
     .then((movies) => res.send(movies))
     .catch(next);
 };
@@ -53,13 +51,7 @@ module.exports.createMovie = (req, res, next) => {
       if (!movie) {
         throw new BadDataError(errMsgs.ERR_MSG_NOT_CREATED('movie'));
       } else {
-        // populate owner
-        Movie.findById(movie._id)
-          .orFail(() => new NotFoundError(errMsgs.ERR_MSG_NOT_FOUND('movie')))
-          .populate(['owner'])
-          .then((populatedMovie) => {
-            res.send(populatedMovie);
-          });
+        res.send(movie);
       }
     })
     .catch(next);
@@ -75,10 +67,11 @@ module.exports.deleteMovie = (req, res, next) => {
     .then((movie) => {
       if (movie.owner._id.toString() !== _id) {
         throw new ForbiddenError();
+      } else {
+        return Movie.deleteOne(movie)
+          .orFail(() => new NotFoundError(errMsgs.ERR_MSG_NOT_FOUND('movie')))
+          .then(() => { res.send(); });
       }
-      Movie.findByIdAndRemove(filmId)
-        .orFail(() => new NotFoundError(errMsgs.ERR_MSG_NOT_FOUND('movie')))
-        .then(() => { res.send({ message: resMsgs.RES_MSG_MOVIE_DELETED }); });
     })
     .catch(next);
 };
