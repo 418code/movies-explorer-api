@@ -1,3 +1,4 @@
+require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const NotAuthError = require('../errors/NotAuthError');
 const { errMsgs, jwtDevKey } = require('../utils/utils');
