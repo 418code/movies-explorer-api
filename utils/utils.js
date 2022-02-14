@@ -42,8 +42,6 @@ module.exports.sendErrRes = (res, errCode, errMsg) => {
   res.status(errCode).send({ error: { message: errMsg } });
 };
 
-module.exports.urlRegEx = /https?:\/\/(www\.)?[a-zA-Z0-9._~:/?#[\]@!$&'()*+,;=]+/;
-
 module.exports.jwtDevKey = 'aa261cbe7d74fd2d3766c625d186fa075759a4e267b4ea8413f8f68697082921';
 
 module.exports.cookieMaxAge = 7 * 24 * 60 * 60; // time in seconds

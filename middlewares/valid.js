@@ -1,5 +1,12 @@
 const { celebrate, Joi, Segments } = require('celebrate');
-const { urlRegEx } = require('../utils/utils');
+const validator = require('validator');
+
+const isURLValidator = (value, helpers) => {
+  if (!validator.isURL(value)) {
+    return helpers.error('any.invalid');
+  }
+  return value;
+};
 
 module.exports.validateUpdateUser = celebrate({
   [Segments.BODY]: Joi.object().keys({
@@ -30,9 +37,9 @@ module.exports.validateCreateMovie = celebrate({
     duration: Joi.number().required(),
     year: Joi.string().required().min(4).max(4),
     description: Joi.string().required(),
-    image: Joi.string().required().regex(urlRegEx),
-    trailer: Joi.string().required().regex(urlRegEx),
-    thumbnail: Joi.string().required().regex(urlRegEx),
+    image: Joi.string().required().custom(isURLValidator),
+    trailer: Joi.string().required().custom(isURLValidator),
+    thumbnail: Joi.string().required().custom(isURLValidator),
     movieId: Joi.number().required(),
     nameRU: Joi.string().required().min(2).max(1024),
     nameEN: Joi.string().required().min(2).max(1024),

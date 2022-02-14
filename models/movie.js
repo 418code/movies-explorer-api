@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
-const { urlRegEx } = require('../utils/utils');
+const validator = require('validator');
+const { errMsgs } = require('../utils/utils');
+const BadDataError = require('../errors/BadDataError');
 
 const movieSchema = new mongoose.Schema({
   country: {
@@ -31,17 +33,29 @@ const movieSchema = new mongoose.Schema({
   image: {
     type: String,
     required: true,
-    match: urlRegEx,
+    validate(value) {
+      if (!validator.isURL(value)) {
+        throw new BadDataError(errMsgs.ERR_MSG_BAD_DATA('image'));
+      }
+    },
   },
   trailer: {
     type: String,
     required: true,
-    match: urlRegEx,
+    validate(value) {
+      if (!validator.isURL(value)) {
+        throw new BadDataError(errMsgs.ERR_MSG_BAD_DATA('trailer'));
+      }
+    },
   },
   thumbnail: {
     type: String,
     required: true,
-    match: urlRegEx,
+    validate(value) {
+      if (!validator.isURL(value)) {
+        throw new BadDataError(errMsgs.ERR_MSG_BAD_DATA('thumbnail'));
+      }
+    },
   },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
