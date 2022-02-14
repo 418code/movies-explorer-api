@@ -42,6 +42,7 @@ const errorLogger = expressWinston.errorLogger({
       maxFiles: '64',
     }),
   ],
+  requestFilter: customRequestFilter,
   format: winston.format.combine(
     winston.format.colorize(),
     winston.format.json(),
