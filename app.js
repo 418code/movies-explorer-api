@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const cors = require('cors');
 const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
@@ -10,6 +11,7 @@ const {
   requestLogger,
   errorLogger,
 } = require('./middlewares/logger');
+const corsOptions = require('./utils/utils');
 
 const { PORT, NODE_ENV, MONGO_URL } = process.env;
 
@@ -21,6 +23,7 @@ const app = express();
 
 app.use(requestLogger);
 app.use(limiter);
+app.use(cors(corsOptions));
 app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true, limit: '1kb', parameterLimit: 10 }));

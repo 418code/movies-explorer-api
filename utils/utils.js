@@ -1,3 +1,5 @@
+const { NODE_ENV } = process.env;
+
 module.exports.errMsgs = {
   ERR_MSG_DEFAULT: 'A server error happened',
   ERR_MSG_LOGIN: 'Wrong email or password',
@@ -49,4 +51,13 @@ module.exports.cookieMaxAge = 7 * 24 * 60 * 60; // time in seconds
 module.exports.limiterValues = {
   windowMs: 10 * 60 * 1000, // 10 min
   max: 100, // limit each IP to 100 requests per windowMs
+};
+
+module.exports.corsOptions = {
+  origin: (NODE_ENV === 'production'
+    ? 'https://movies.418co.de'
+    : 'http://localhost:3001'),
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  preflightContinue: false,
+  optionsSuccessStatus: 204,
 };
