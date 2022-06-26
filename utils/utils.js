@@ -46,7 +46,7 @@ module.exports.sendErrRes = (res, errCode, errMsg) => {
 
 module.exports.jwtDevKey = 'aa261cbe7d74fd2d3766c625d186fa075759a4e267b4ea8413f8f68697082921';
 
-module.exports.cookieMaxAge = 7 * 24 * 60 * 60; // time in seconds
+module.exports.cookieMaxAge = 7 * 24 * 60 * 60 * 1000; // time in ms
 
 module.exports.limiterValues = {
   windowMs: 10 * 60 * 1000, // 10 min
@@ -60,4 +60,18 @@ module.exports.corsOptions = {
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   preflightContinue: false,
   optionsSuccessStatus: 204,
+  credentials: true,
+};
+
+module.exports.httpOnlyCookieOptions = {
+  maxAge: this.cookieMaxAge,
+  httpOnly: true,
+  ...(NODE_ENV === 'production') && { secure: true },
+  ...(NODE_ENV === 'production') && { sameSite: 'Strict' },
+};
+
+module.exports.cookieOpitons = {
+  maxAge: this.cookieMaxAge,
+  ...(NODE_ENV === 'production') && { secure: true },
+  ...(NODE_ENV === 'production') && { sameSite: 'Strict' },
 };

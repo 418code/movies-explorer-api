@@ -8,6 +8,8 @@ const {
   errCodes,
   jwtDevKey,
   cookieMaxAge,
+  httpOnlyCookieOptions,
+  cookieOptions,
 } = require('../utils/utils');
 const NotFoundError = require('../errors/NotFoundError');
 const ConflictError = require('../errors/ConflictError');
@@ -80,11 +82,10 @@ module.exports.login = (req, res, next) => {
   User.findUserByCredentials(email, password)
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : jwtDevKey, { expiresIn: '7d' });
-      res.cookie('jwt', token, {
-        maxAge: cookieMaxAge,
-        httpOnly: true,
-      })
-        .end();
+      res
+        .cookie('jwt', token, httpOnlyCookieOptions)
+        .cookie('checkJWT', true, cookieOptions)
+        .send({ data: {} });
     })
     .catch(next);
 };

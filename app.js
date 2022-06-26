@@ -11,7 +11,7 @@ const {
   requestLogger,
   errorLogger,
 } = require('./middlewares/logger');
-const corsOptions = require('./utils/utils');
+const { corsOptions } = require('./utils/utils');
 
 const { PORT, NODE_ENV, MONGO_URL } = process.env;
 
