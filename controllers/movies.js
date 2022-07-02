@@ -70,7 +70,7 @@ module.exports.deleteMovie = (req, res, next) => {
       } else {
         return Movie.deleteOne(movie)
           .orFail(() => new NotFoundError(errMsgs.ERR_MSG_NOT_FOUND('movie')))
-          .then(() => { res.send(); });
+          .then(() => { res.send({ data: {} }); });
       }
     })
     .catch(next);

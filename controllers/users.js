@@ -7,7 +7,8 @@ const {
   errNames,
   errCodes,
   jwtDevKey,
-  cookieMaxAge,
+  httpOnlyCookieOptions,
+  cookieOptions,
 } = require('../utils/utils');
 const NotFoundError = require('../errors/NotFoundError');
 const ConflictError = require('../errors/ConflictError');
@@ -21,7 +22,7 @@ module.exports.getUserInfo = (req, res, next) => {
 
   User.findById(_id)
     .orFail(() => new NotFoundError(errMsgs.ERR_MSG_NOT_FOUND('user')))
-    .then((user) => res.send({ data: user }))
+    .then((user) => res.send({ data: { name: user.name, email: user.email } }))
     .catch(next);
 };
 
@@ -37,7 +38,7 @@ module.exports.updateUser = (req, res, next) => {
       } else if (!user) {
         throw new BadDataError(errMsgs.ERR_MSG_NOT_UPDATED('user'));
       } else {
-        res.send({ data: user });
+        res.send({ data: { name: user.name, email: user.email } });
       }
     } catch (error) {
       next(error);
@@ -80,11 +81,10 @@ module.exports.login = (req, res, next) => {
   User.findUserByCredentials(email, password)
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : jwtDevKey, { expiresIn: '7d' });
-      res.cookie('jwt', token, {
-        maxAge: cookieMaxAge,
-        httpOnly: true,
-      })
-        .end();
+      res
+        .cookie('jwt', token, httpOnlyCookieOptions)
+        .cookie('checkJWT', true, cookieOptions)
+        .send({ data: { name: user.name, email: user.email } });
     })
     .catch(next);
 };
