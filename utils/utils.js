@@ -69,11 +69,3 @@ module.exports.httpOnlyCookieOptions = {
   ...(NODE_ENV === 'production') && { secure: true },
   ...(NODE_ENV === 'production') && { sameSite: 'Strict' },
 };
-
-module.exports.cookieOpitons = {
-  maxAge: this.cookieMaxAge,
-  httpOnly: false,
-  secure: false,
-  sameSite: 'lax',
-  path: '/',
-};
