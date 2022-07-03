@@ -72,6 +72,4 @@ module.exports.httpOnlyCookieOptions = {
 
 module.exports.cookieOpitons = {
   maxAge: this.cookieMaxAge,
-  ...(NODE_ENV === 'production') && { secure: true },
-  ...(NODE_ENV === 'production') && { sameSite: 'Strict' },
 };
