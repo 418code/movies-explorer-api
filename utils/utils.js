@@ -72,4 +72,8 @@ module.exports.httpOnlyCookieOptions = {
 
 module.exports.cookieOpitons = {
   maxAge: this.cookieMaxAge,
+  httpOnly: false,
+  secure: false,
+  sameSite: 'lax',
+  path: '/',
 };
