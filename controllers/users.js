@@ -83,7 +83,11 @@ module.exports.login = (req, res, next) => {
       const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : jwtDevKey, { expiresIn: '7d' });
       res
         .cookie('jwt', token, httpOnlyCookieOptions)
-        .cookie('checkJWT', true, { maxAge: cookieMaxAge })
+        .cookie('checkJWT', true, {
+          maxAge: cookieMaxAge,
+          domain: NODE_ENV === 'production'
+            ? '.movies.418co.de' : 'localhost',
+        })
         .send({ data: { name: user.name, email: user.email } });
     })
     .catch(next);
