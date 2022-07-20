@@ -50,7 +50,7 @@ module.exports.cookieMaxAge = 7 * 24 * 60 * 60 * 1000; // time in ms
 
 module.exports.limiterValues = {
   windowMs: 10 * 60 * 1000, // 10 min
-  max: 100, // limit each IP to 100 requests per windowMs
+  max: 200, // limit each IP to 100 requests per windowMs
 };
 
 module.exports.corsOptions = {
