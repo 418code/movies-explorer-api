@@ -22,28 +22,33 @@ module.exports.getUserInfo = (req, res, next) => {
 
   User.findById(_id)
     .orFail(() => new NotFoundError(errMsgs.ERR_MSG_NOT_FOUND('user')))
-    .then((user) => res.send({ data: { name: user.name, email: user.email } }))
+    .then((user) => res.send({ data: { name: user.name, email: user.email, locale: user.locale } }))
     .catch(next);
 };
 
 // PATCH /users/me — updates profile
 module.exports.updateUser = (req, res, next) => {
-  const { name, email } = req.body;
+  const { name, email, locale } = req.body;
   const { _id } = req.user;
 
-  User.findByIdAndUpdate(_id, { name, email }, { new: true, runValidators: true }, (err, user) => {
-    try {
-      if (err && err.name === errNames.MONGO && err.code === errCodes.ERR_CODE_MDB_DUPLICATE) {
-        throw new ConflictError(errMsgs.ERR_MSG_NOT_UPDATED('email'));
-      } else if (!user) {
-        throw new BadDataError(errMsgs.ERR_MSG_NOT_UPDATED('user'));
-      } else {
-        res.send({ data: { name: user.name, email: user.email } });
+  User.findByIdAndUpdate(
+    _id,
+    { name, email, locale },
+    { new: true, runValidators: true },
+    (err, user) => {
+      try {
+        if (err && err.name === errNames.MONGO && err.code === errCodes.ERR_CODE_MDB_DUPLICATE) {
+          throw new ConflictError(errMsgs.ERR_MSG_NOT_UPDATED('email'));
+        } else if (!user) {
+          throw new BadDataError(errMsgs.ERR_MSG_NOT_UPDATED('user'));
+        } else {
+          res.send({ data: { name: user.name, email: user.email, locale: user.locale } });
+        }
+      } catch (error) {
+        next(error);
       }
-    } catch (error) {
-      next(error);
     }
-  });
+  );
 };
 
 // POST /signup
@@ -88,7 +93,7 @@ module.exports.login = (req, res, next) => {
           domain: NODE_ENV === 'production'
             ? '.movies.418co.de' : 'localhost',
         })
-        .send({ data: { name: user.name, email: user.email } });
+        .send({ data: { name: user.name, email: user.email, locale: user.locale } });
     })
     .catch(next);
 };
