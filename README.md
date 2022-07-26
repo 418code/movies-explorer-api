@@ -1,7 +1,7 @@
 # movies-explorer-api
 ## Description
 
-Node/Express/MongoDB back end for React movie search front end
+Node/Express/MongoDB back end for [React movie search front end](https://github.com/418code/movies-explorer-frontend)
 
 ## Live deployment
 
@@ -26,6 +26,6 @@ for testing production environment add movies.env with NODE_ENV, PORT, JWT_SECRE
 ## Technologies used
 - Node, Express: middlewares, routers, controllers, REST api, error handling
 - MongoDB, Mongoose: schemas, models, CRUD operations, refs, statics
-- Security: bcrypt password hashing, Celebrate/Joi + MongoDB validation with regex matching, JWT token, http only cookies, rate limiter, winston loggers, .env production variables, pinned npm package versions
+- Security: bcrypt password hashing, Celebrate/Joi + MongoDB validation with regex matching, JWT token, http only cookies, rate limiter, winston loggers, .env production variables, pinned npm package versions, CORS
 - Google Compute Platform: debian VM, Nginx with proxy pass, PM2 with auto reload, Let's Encrypt SSL certificate, dynamic DNS, custom domain
 
